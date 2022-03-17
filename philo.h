@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/15 20:38:07 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/17 20:22:22 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@
 
 typedef struct s_list
 {
-	void			*num_philo;
-	void			*time_die;
-	void			*time_eat;
-	void			*time_sleep;
-	void			*num_eating;
+	int			num_philo;
+	int			time_die;
+	int			time_eat;
+	int			time_sleep;
+	int			num_eating;
+	int			ntpm_eat;
 	struct s_list	*next;
 }					t_list;
 
