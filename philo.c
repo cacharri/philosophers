@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/17 20:22:24 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/18 21:02:42 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,19 @@ static void parseo(t_list *data, char **argv, int argc)
 		data->ntpm_eat = -1;
 }
 
+static t_list	*init(t_list *data, char **argv)
+{
+	t_list *aux;
+
+	data->num_philo = ft_atoi(argv[1]);
+	data->time_die = ft_atoi(argv[2]);
+	data->time_eat = ft_atoi(argv[3]);
+	data->time_sleep = ft_atoi(argv[4]);
+	if (argv[5])
+		data->ntpm_eat = ft_atoi(argv[5]);
+
+}
+
 void *thread_routine(void *arg)
 {
 	int i = 0;
@@ -99,10 +112,10 @@ int main(int argc, char **argv)
 	t_list		data;
 	int value;
 
-	pthread_create(&thread1, NULL, thread_routine, &value);
 	if (argc == 5 || argc == 6)
 	{
 		parseo(&data, argv, argc);
+		pthread_create(&thread1, NULL, thread_routine, &value);
 		if (argc == 5)
 		{
 
