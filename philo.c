@@ -6,17 +6,18 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/18 21:02:42 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/21 20:24:39 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+/*
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <sys/time.h>
+#include <sys/time.h>*/
 
 static int	ft_atoi(const char *str)
 {
@@ -77,23 +78,20 @@ static void parseo(t_list *data, char **argv, int argc)
 			exit (1);
 		}
 	}
-	else
-		data->ntpm_eat = -1;
 }
 
-static t_list	*init(t_list *data, char **argv)
+static void	init(t_list *data, char **argv)
 {
-	t_list *aux;
-
 	data->num_philo = ft_atoi(argv[1]);
 	data->time_die = ft_atoi(argv[2]);
 	data->time_eat = ft_atoi(argv[3]);
 	data->time_sleep = ft_atoi(argv[4]);
 	if (argv[5])
 		data->ntpm_eat = ft_atoi(argv[5]);
-
+	else
+		data->ntpm_eat = -1;
 }
-
+/*
 void *thread_routine(void *arg)
 {
 	int i = 0;
@@ -105,21 +103,20 @@ void *thread_routine(void *arg)
 		
 	}
 }
-
+*/
 int main(int argc, char **argv)
 {
-	pthread_t	thread1;
+	pthread_t	tid;
 	t_list		data;
-	int value;
+	//int value;
 
 	if (argc == 5 || argc == 6)
 	{
 		parseo(&data, argv, argc);
-		pthread_create(&thread1, NULL, thread_routine, &value);
-		if (argc == 5)
-		{
-
-		}
+		init(&data, argv);
+		pthread_create(&tid, NULL, thread_routine, &value);
 	}
+	else
+		write(1, "Not enough arguments\n", 21);
 	return (0);
 }
