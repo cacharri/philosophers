@@ -6,18 +6,11 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/21 20:24:39 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/22 20:41:12 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-/*
-#include <pthread.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/time.h>*/
 
 static int	ft_atoi(const char *str)
 {
@@ -92,29 +85,36 @@ static void	init(t_list *data, char **argv)
 		data->ntpm_eat = -1;
 }
 /*
+int lead_mutex(t_list *data)
+{
+	int	i;
+
+	i = 0;
+	while (i++ <= data->num_philo)
+	{
+
+	}
+}*/
+
 void *thread_routine(void *arg)
 {
-	int i = 0;
-	int nr_lines = *((int *)arg);
-
 	printf("El hilo comienza a ejecutarse... \n");
-	while(i++ < nr_lines)
-	{
-		
-	}
 }
-*/
+
 int main(int argc, char **argv)
 {
-	pthread_t	tid;
 	t_list		data;
-	//int value;
+	t_philo		philo;
+	int			i;
 
 	if (argc == 5 || argc == 6)
 	{
 		parseo(&data, argv, argc);
 		init(&data, argv);
-		pthread_create(&tid, NULL, thread_routine, &value);
+		data.philo_thread = (int)malloc(sizeof)data.num_philo;
+		
+		if(0 != pthread_create(&philo.tid, NULL, thread_routine, 1);
+				return (-1);
 	}
 	else
 		write(1, "Not enough arguments\n", 21);
