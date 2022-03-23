@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/22 20:41:10 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/23 20:00:13 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ typedef struct s_philo
 	int					ate;
 	int					l_fork;
 	int					r_fork;
-	pthread_t			thread_tid;
+	int					times_eat;
+	pthread_mutex_t		forky_l;
+	pthread_mutex_t		*forky_r;
+	t_list				*data;
 }								t_philo;
 
 typedef struct s_list
@@ -44,14 +47,12 @@ typedef struct s_list
 	int					time_die;
 	int					time_eat;
 	int					time_sleep;
-	int					num_eating;
 	int					ntpm_eat;
+	int					dead;
+	useconds_t			time_all;
 	pthread_t			*philo_thread;
 	pthread_mutex_t		ate;
-	pthread_mutex_t		*forks;
-	pthread_mutex_t		write_to;
-	pthread_mutex_t		*philoss;
-	t_philo				*philo;
+	pthread_mutex_t		dead_oppa;
 	t_state				state;
 }								t_list;
 

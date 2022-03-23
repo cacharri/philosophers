@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/22 20:41:12 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/23 20:00:11 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static void	init(t_list *data, char **argv)
 	data->time_die = ft_atoi(argv[2]);
 	data->time_eat = ft_atoi(argv[3]);
 	data->time_sleep = ft_atoi(argv[4]);
+	data->dead = 1;
+	data->philo_thread = malloc(sizeof(pthread_t) * data->num_philo);
 	if (argv[5])
 		data->ntpm_eat = ft_atoi(argv[5]);
 	else
@@ -95,28 +97,64 @@ int lead_mutex(t_list *data)
 
 	}
 }*/
+useconds_t		time_me(void)
+{
+	struct	timeval ti;
+
+	gettimeofday(&ti, NULL);
+	return (ti.tv_sec * 1000 + ti.tv_usec / 1000); 
+}
+
+void		usleep_ph(t_list *data, useconds_t time)
+{
+	useconds_t	actual_time;
+	useconds_t	interval_time;
+
+	actual_time = time_me();
+	interval_time = time + actual_time;
+	while (actual_time < interval_time)
+	{
+		if (data->dead)
+			break ;
+		actual_time = time_me();
+		usleep(interval_time);
+	}
+}
 
 void *thread_routine(void *arg)
 {
+	t_list	*dock;
+	int i;
+
+	i = 0;
+	dock = (t_list *) arg;
+	dock->time_all = time_me();
+	while (dock->dead == 1)
+	{
+		printf("hola\n");
+	}
+	
 	printf("El hilo comienza a ejecutarse... \n");
+	return(0);
 }
 
 int main(int argc, char **argv)
 {
 	t_list		data;
-	t_philo		philo;
 	int			i;
 
+	i = 0;
 	if (argc == 5 || argc == 6)
 	{
 		parseo(&data, argv, argc);
+		printf("as");
 		init(&data, argv);
-		data.philo_thread = (int)malloc(sizeof)data.num_philo;
-		
-		if(0 != pthread_create(&philo.tid, NULL, thread_routine, 1);
-				return (-1);
+		while (++i <= data.num_philo)
+		{
+			pthread_create(&data.philo_thread[i], NULL, thread_routine, &data);
+		}
 	}
 	else
-		write(1, "Not enough arguments\n", 21);
+		write(1, "Insert 4 or 5 arguments\n", 24);
 	return (0);
 }
