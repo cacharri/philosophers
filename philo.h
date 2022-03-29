@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/23 20:00:13 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/29 21:11:28 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,6 @@ typedef enum	e_state
 	FINISH
 }				t_state;
 
-typedef struct s_philo
-{
-	int					tid;
-	int					ate;
-	int					l_fork;
-	int					r_fork;
-	int					times_eat;
-	pthread_mutex_t		forky_l;
-	pthread_mutex_t		*forky_r;
-	t_list				*data;
-}								t_philo;
-
 typedef struct s_list
 {
 	int					num_philo;
@@ -57,7 +45,16 @@ typedef struct s_list
 }								t_list;
 
 
-
-
+typedef struct s_philo
+{
+	int					tid;
+	int					ate;
+	int					l_fork;
+	int					r_fork;
+	int					times_eat;
+	pthread_mutex_t		forky_l;
+	pthread_mutex_t		*forky_r;
+	t_list				*data;
+}								t_philo;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/23 20:00:11 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/29 21:11:30 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void parseo(t_list *data, char **argv, int argc)
 	{
 		if ((data->ntpm_eat = ft_atoi(argv[5])) < 1)
 		{
-			write (1, "Nº of times each philosopher must eat must be more than 0", 58);
+			write (1, "Nº of times each philosopher must eat must be more than 0\n", 59);
 			exit (1);
 		}
 	}
@@ -121,6 +121,22 @@ void		usleep_ph(t_list *data, useconds_t time)
 	}
 }
 
+void	philos_init(t_philo *philo, t_list *data)
+{
+	int	i;
+
+	i = 0;
+	while (i++ <= data->num_philo)
+	{
+		philo[i].tid = i + 1;
+		philo[i].l_fork = i;
+		philo[i].r_fork = (i + 1) % data->num_philo;
+		philo[i].ate = 0;
+		philo[i].times_eat = 0;
+		philo[i].data = data;
+	}
+}
+
 void *thread_routine(void *arg)
 {
 	t_list	*dock;
@@ -141,17 +157,19 @@ void *thread_routine(void *arg)
 int main(int argc, char **argv)
 {
 	t_list		data;
+	t_philo		*philo;
 	int			i;
 
 	i = 0;
+	philo = NULL;
 	if (argc == 5 || argc == 6)
 	{
 		parseo(&data, argv, argc);
-		printf("as");
 		init(&data, argv);
 		while (++i <= data.num_philo)
 		{
-			pthread_create(&data.philo_thread[i], NULL, thread_routine, &data);
+			pthread_create(&data.philo_thread[i], NULL, &thread_routine, &philo[i]);
+			printf("as\n");
 		}
 	}
 	else
