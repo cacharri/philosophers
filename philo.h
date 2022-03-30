@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/29 21:11:28 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/30 20:12:00 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ typedef struct s_philo
 {
 	int					tid;
 	int					ate;
-	int					l_fork;
-	int					r_fork;
 	int					times_eat;
+	useconds_t			last_meal_ti;
 	pthread_mutex_t		forky_l;
 	pthread_mutex_t		*forky_r;
 	t_list				*data;

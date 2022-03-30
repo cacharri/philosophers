@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/29 21:11:30 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/03/30 20:11:58 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,27 +129,33 @@ void	philos_init(t_philo *philo, t_list *data)
 	while (i++ <= data->num_philo)
 	{
 		philo[i].tid = i + 1;
-		philo[i].l_fork = i;
-		philo[i].r_fork = (i + 1) % data->num_philo;
 		philo[i].ate = 0;
 		philo[i].times_eat = 0;
 		philo[i].data = data;
 	}
 }
 
+void	routine(t_philo *dock)
+{
+
+}
+
 void *thread_routine(void *arg)
 {
-	t_list	*dock;
+	t_philo	*dock;
 	int i;
 
 	i = 0;
-	dock = (t_list *) arg;
-	dock->time_all = time_me();
-	while (dock->dead == 1)
+	dock = (t_philo *) arg;
+	dock->last_meal_ti = time_me();
+
+	while (dock->data->dead == 1 && dock->times_eat != dock->data->ntpm_eat)
 	{
-		printf("hola\n");
+		pthread_mutex_unlock(&dock->data->ate);
+		routine(dock);
+		pthread_mutex_lock(&dock->data->ate);
 	}
-	
+	pthread_mutex_unlock(&dock->data->ate);
 	printf("El hilo comienza a ejecutarse... \n");
 	return(0);
 }
@@ -166,9 +172,23 @@ int main(int argc, char **argv)
 	{
 		parseo(&data, argv, argc);
 		init(&data, argv);
+		pthread_mutex_init(&data.ate, NULL);
 		while (++i <= data.num_philo)
 		{
-			pthread_create(&data.philo_thread[i], NULL, &thread_routine, &philo[i]);
+			pthread_mutex_init(&philo[i].forky_l, NULL);
+			if (i != data.num_philo)
+				philo[i].forky_r = &philo[i + 1].forky_l;
+			else
+				philo[i].forky_r = &philo[1].forky_l;
+		}
+		i = 0;
+		while (++i <= data.num_philo)
+		{
+			if (pthread_create(&data.philo_thread[i], NULL, &thread_routine, &philo[i]) != 0)
+			{
+				write(1, "There was an error creating the threads\n", 40);
+				return (1);
+			}
 			printf("as\n");
 		}
 	}
