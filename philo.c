@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/03/30 20:11:58 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/01 17:36:31 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ void *thread_routine(void *arg)
 		pthread_mutex_lock(&dock->data->ate);
 	}
 	pthread_mutex_unlock(&dock->data->ate);
-	printf("El hilo comienza a ejecutarse... \n");
 	return(0);
 }
 
