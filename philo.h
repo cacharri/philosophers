@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/01 17:36:33 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/05 17:29:23 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,11 @@ typedef struct s_philo
 	pthread_mutex_t		*forky_r;
 	t_list				*data;
 }								t_philo;
+
+useconds_t		time_me(void);
+void			usleep_ph(t_list *data, useconds_t time);
+void			philos_init(t_philo *philo, t_list *data);
+void			*thread_routine(void *arg);
+void			routine(t_philo *dock);
 
 #endif

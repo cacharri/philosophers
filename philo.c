@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/01 17:36:31 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/05 17:29:21 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,35 @@ void	philos_init(t_philo *philo, t_list *data)
 	}
 }
 
+int		ft_strlen(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+void	ft_putstr(char *s)
+{
+	if (!(s == NULL))
+		write (1, s, ft_strlen(s));
+}
+
+void	writting(t_philo *dock)
+{
+	ft_putstr(gettime)
+}
+
 void	routine(t_philo *dock)
 {
+	pthread_mutex_lock(&dock->forky_l);
+	//write coge tenedor izquierdo
+	pthread_mutex_lock(dock->forky_r);
+	//write coge tenedor derecho
+	dock->times_eat = time_me();
+
 
 }
 
@@ -148,7 +175,6 @@ void *thread_routine(void *arg)
 	i = 0;
 	dock = (t_philo *) arg;
 	dock->last_meal_ti = time_me();
-
 	while (dock->data->dead == 1 && dock->times_eat != dock->data->ntpm_eat)
 	{
 		pthread_mutex_unlock(&dock->data->ate);
@@ -171,10 +197,18 @@ int main(int argc, char **argv)
 	{
 		parseo(&data, argv, argc);
 		init(&data, argv);
-		pthread_mutex_init(&data.ate, NULL);
+		if (pthread_mutex_init(&data.ate, NULL))
+		{
+			write(1, "There was an error with the init\n", 33);
+			return (1);
+		}
 		while (++i <= data.num_philo)
 		{
-			pthread_mutex_init(&philo[i].forky_l, NULL);
+			if (pthread_mutex_init(&philo[i].forky_l, NULL))
+			{
+				write(1, "There was an error with the init\n", 33);
+				return (1);
+			}
 			if (i != data.num_philo)
 				philo[i].forky_r = &philo[i + 1].forky_l;
 			else
@@ -188,7 +222,7 @@ int main(int argc, char **argv)
 				write(1, "There was an error creating the threads\n", 40);
 				return (1);
 			}
-			printf("as\n");
+			usleep(200);
 		}
 	}
 	else
