@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/05 17:29:21 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/06 18:27:10 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ useconds_t		time_me(void)
 	return (ti.tv_sec * 1000 + ti.tv_usec / 1000); 
 }
 
-void		usleep_ph(t_list *data, useconds_t time)
+void		usleep_ph(t_philo *data, useconds_t time)
 {
 	useconds_t	actual_time;
 	useconds_t	interval_time;
@@ -114,7 +114,7 @@ void		usleep_ph(t_list *data, useconds_t time)
 	interval_time = time + actual_time;
 	while (actual_time < interval_time)
 	{
-		if (data->dead)
+		if (data->data->dead == 0)
 			break ;
 		actual_time = time_me();
 		usleep(interval_time);
@@ -162,7 +162,14 @@ void	routine(t_philo *dock)
 	//write coge tenedor izquierdo
 	pthread_mutex_lock(dock->forky_r);
 	//write coge tenedor derecho
-	dock->times_eat = time_me();
+	dock->data->time_eat = time_me();
+	dock->times_eat++;
+	usleep_ph(dock, dock->data->time_eat);
+	pthread_mutex_unlock(&dock->forky_l);
+	pthread_mutex_unlock(dock->forky_r);
+	//esta comiendo un filosofu mu listo
+	usleep_ph(dock, dock->data->time_sleep);
+	//elfilosofuuu esta echando una siestina
 
 
 }
