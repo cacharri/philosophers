@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/06 18:27:12 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/12 19:32:49 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@
 # include <fcntl.h>
 # include <sys/time.h>
 
-typedef enum	e_state
-{
-	EAT,
-	SLEEP,
-	THINK,
-	RUNNING,
-	FINISH
-}				t_state;
+# define EAT 1
+# define SLEEP 2
+# define THINK 3
+# define RUNNING 4
+# define DEAD 5
+# define FORLEF 6
+# define FORIGH 7
 
 typedef struct s_list
 {
@@ -37,11 +36,11 @@ typedef struct s_list
 	int					time_sleep;
 	int					ntpm_eat;
 	int					dead;
+	useconds_t			startt;
 	useconds_t			time_all;
 	pthread_t			*philo_thread;
 	pthread_mutex_t		ate;
 	pthread_mutex_t		dead_oppa;
-	t_state				state;
 }								t_list;
 
 
@@ -61,5 +60,6 @@ void			usleep_ph(t_philo *data, useconds_t time);
 void			philos_init(t_philo *philo, t_list *data);
 void			*thread_routine(void *arg);
 void			routine(t_philo *dock);
+void			writting(t_philo *dock, int s);
 
 #endif

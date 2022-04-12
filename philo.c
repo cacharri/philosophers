@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/06 18:27:10 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/12 19:32:47 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,10 @@ static void	init(t_list *data, char **argv)
 		data->ntpm_eat = ft_atoi(argv[5]);
 	else
 		data->ntpm_eat = -1;
+	data->startt = time_me();
+
 }
-/*
-int lead_mutex(t_list *data)
-{
-	int	i;
 
-	i = 0;
-	while (i++ <= data->num_philo)
-	{
-
-	}
-}*/
 useconds_t		time_me(void)
 {
 	struct	timeval ti;
@@ -135,43 +127,41 @@ void	philos_init(t_philo *philo, t_list *data)
 	}
 }
 
-int		ft_strlen(char *s)
+void	writting(t_philo *dock, int s)
 {
-	int	i;
+	useconds_t time;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-void	ft_putstr(char *s)
-{
-	if (!(s == NULL))
-		write (1, s, ft_strlen(s));
-}
-
-void	writting(t_philo *dock)
-{
-	ft_putstr(gettime)
+	if (dock->data->dead == 0 && s != DEAD)
+		return ;
+	time = time_me() - dock->data->startt;
+	if (s == 6)
+		printf("%d philosopher %d has taken a fork\n", time, dock->tid);
+	if (s == 7)
+		printf("%d philosopher %d has taken a fork\n", time, dock->tid);
+	if (s == 1)
+		printf ("%d philosopher %d is eating\n", time, dock->tid);
+	if (s == 2 && dock->times_eat != dock->data->ntpm_eat)
+		printf ("%d philosopher %d is sleeping\n", time, dock->tid);
+	if (s == 3 && dock->times_eat != dock->data->ntpm_eat)
+		printf ("%d philosopher %d is thinking\n", time, dock->tid);
+	if (s == 5)
+		printf ("%d philosopher %d have just died\n", time, dock->tid);
 }
 
 void	routine(t_philo *dock)
 {
 	pthread_mutex_lock(&dock->forky_l);
-	//write coge tenedor izquierdo
+	writting(dock, 6);
 	pthread_mutex_lock(dock->forky_r);
-	//write coge tenedor derecho
+	writting(dock, 7);
 	dock->data->time_eat = time_me();
 	dock->times_eat++;
 	usleep_ph(dock, dock->data->time_eat);
 	pthread_mutex_unlock(&dock->forky_l);
 	pthread_mutex_unlock(dock->forky_r);
-	//esta comiendo un filosofu mu listo
+	writting(dock, 1);
 	usleep_ph(dock, dock->data->time_sleep);
-	//elfilosofuuu esta echando una siestina
-
-
+	writting(dock, 2);
 }
 
 void *thread_routine(void *arg)
