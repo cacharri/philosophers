@@ -172,6 +172,7 @@ void *thread_routine(void *arg)
 	i = 0;
 	dock = (t_philo *) arg;
 	dock->last_meal_ti = time_me();
+        pthread_mutex_lock(&dock->data->ate);
 	while (dock->data->dead == 1 && dock->times_eat != dock->data->ntpm_eat)
 	{
 		pthread_mutex_unlock(&dock->data->ate);
