@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/12 19:32:47 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/18 19:52:50 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,7 @@ void	routine(t_philo *dock)
 void *thread_routine(void *arg)
 {
 	t_philo	*dock;
-	int i;
 
-	i = 0;
 	dock = (t_philo *) arg;
 	dock->last_meal_ti = time_me();
 	while (dock->data->dead == 1 && dock->times_eat != dock->data->ntpm_eat)
@@ -180,6 +178,32 @@ void *thread_routine(void *arg)
 	}
 	pthread_mutex_unlock(&dock->data->ate);
 	return(0);
+}
+
+void	is_ornot_dead(t_philo *philo, t_list *list)
+{
+	useconds_t	ti;
+	int			i;
+
+	i = 0;
+	while (philo->times_eat != list->ntpm_eat)
+	{
+		if (i == list->num_philo - 1)
+			i = 0;
+		ti = time_me() - philo[i].last_meal_ti;
+		if (ti >= philo[i].data->time_die)
+		{
+			pthread_mutex_lock(&philo->data->ate);
+			philo[i].data->dead = 0;
+			pthread_mutex_unlock();
+			pthread_mutex_unlock();
+			writting(philo, 5);
+			return ;
+		}
+		if (list->num_philo != 1)
+			i++;
+
+	}
 }
 
 int main(int argc, char **argv)
