@@ -6,16 +6,16 @@
 #    By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/15 16:20:40 by ialvarez          #+#    #+#              #
-#    Updated: 2022/03/21 18:17:25 by ialvarez         ###   ########.fr        #
+#    Updated: 2022/04/19 21:00:12 by ialvarez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
+CC = gcc 
 NAME = philo
 
 SRCS = philo.c
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror -I. -g3 -fsanitize=address
 
 all: $(NAME)
 
