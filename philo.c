@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/19 21:07:45 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/20 20:30:39 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,15 +136,15 @@ void	writting(t_philo *dock, int s)
 	time = time_me() - dock->data->startt;
 	if (s == 6)
 		printf("%d philosopher %d has taken a fork\n", time, dock->tid);
-	if (s == 7)
+	else if (s == 7)
 		printf("%d philosopher %d has taken a fork\n", time, dock->tid);
-	if (s == 1)
+	else if (s == 1)
 		printf ("%d philosopher %d is eating\n", time, dock->tid);
-	if (s == 2 && dock->times_eat != dock->data->ntpm_eat)
+	else if (s == 2 && dock->times_eat != dock->data->ntpm_eat)
 		printf ("%d philosopher %d is sleeping\n", time, dock->tid);
-	if (s == 3 && dock->times_eat != dock->data->ntpm_eat)
+	else if (s == 3 && dock->times_eat != dock->data->ntpm_eat)
 		printf ("%d philosopher %d is thinking\n", time, dock->tid);
-	if (s == 5)
+	else if (s == 5)
 		printf ("%d philosopher %d have just died\n", time, dock->tid);
 }
 
@@ -154,14 +154,18 @@ void	routine(t_philo *dock)
 	writting(dock, 6);
 	pthread_mutex_lock(&dock->forky_r);
 	writting(dock, 7);
+	writting(dock, 1);
 	dock->data->time_eat = time_me();
 	dock->times_eat++;
-	usleep_ph(dock, dock->data->time_eat);
+	//usleep_ph(dock, dock->data->time_eat);
+	usleep(100);
 	pthread_mutex_unlock(dock->forky_l);
 	pthread_mutex_unlock(&dock->forky_r);
-	writting(dock, 1);
-	usleep_ph(dock, dock->data->time_sleep);
+	write(STDERR_FILENO, "Rasis aqui\n", 11);
 	writting(dock, 2);
+//	write(STDERR_FILENO, "Rasis aqui\n", 11);
+	usleep_ph(dock, dock->data->time_sleep);
+	writting(dock, 3);
 }
 
 void *thread_routine(void *arg)
@@ -201,7 +205,7 @@ void	is_ornot_dead(t_philo *philo, t_list *list)
 			pthread_mutex_unlock(philo[i].forky_l);
 			pthread_mutex_unlock(&philo[i].forky_r);
 			writting(philo, 5);
-			return ;
+			exit(1) ;
 		}
 		if (list->num_philo != 1)
 			i++;
@@ -233,31 +237,29 @@ int main(int argc, char **argv)
 				write(1, "There was an error with the init\n", 33);
 				return (1);
 			}
-			if (i != data.num_philo)
+			else if (i != data.num_philo || i == 0)
 				philo[i].forky_l = &philo[i - 1].forky_r;
 			else
-				philo[1].forky_l = &philo[i].forky_r;
+				philo[0].forky_l = &philo[i].forky_r;
 		}
 		i = -1;
 		philos_init(philo, &data);
 		while (++i < data.num_philo)
 		{
-			write(STDERR_FILENO, "hasta aqui\n", 11);
 			if (pthread_create(&data.philo_thread[i], NULL, &thread_routine, &philo[i]))
 			{
 				write(1, "There was an error creating the threads\n", 40);
 				return (1);
 			}
-			//usleep(10);
+			usleep(120);
 		}
-		write(STDERR_FILENO, "hasus aqui\n", 11);
+		//write(STDERR_FILENO, "hasus aqui\n", 11);
 		is_ornot_dead(philo, &data);
 		i = -1;/*
 		while (++i < data.num_philo)
 		{
 			pthread_join(data.philo_thread[i], NULL);
 		}*/
-
 	}
 	else
 		write(1, "Insert 4 or 5 arguments\n", 24);
