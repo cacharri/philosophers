@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/20 20:23:21 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/25 21:38:08 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,15 @@
 typedef struct s_list
 {
 	int					num_philo;
-	int					time_die;
-	int					time_eat;
-	int					time_sleep;
+	useconds_t			time_die;
+	useconds_t			time_eat;
+	useconds_t		time_sleep;
 	int					ntpm_eat;
 	int					dead;
 	useconds_t			startt;
 	useconds_t			time_all;
 	pthread_t			*philo_thread;
 	pthread_mutex_t		ate;
-	pthread_mutex_t		dead_oppa;
 }								t_list;
 
 

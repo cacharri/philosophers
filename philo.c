@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/20 20:30:39 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/25 21:38:06 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void		usleep_ph(t_philo *data, useconds_t time)
 		if (data->data->dead == 0)
 			break ;
 		actual_time = time_me();
-		usleep(interval_time);
+		usleep(time);
 	}
 }
 
@@ -155,15 +155,12 @@ void	routine(t_philo *dock)
 	pthread_mutex_lock(&dock->forky_r);
 	writting(dock, 7);
 	writting(dock, 1);
-	dock->data->time_eat = time_me();
+	dock->last_meal_ti = time_me();
 	dock->times_eat++;
-	//usleep_ph(dock, dock->data->time_eat);
-	usleep(100);
+	usleep_ph(dock, dock->data->time_eat);
 	pthread_mutex_unlock(dock->forky_l);
 	pthread_mutex_unlock(&dock->forky_r);
-	write(STDERR_FILENO, "Rasis aqui\n", 11);
 	writting(dock, 2);
-//	write(STDERR_FILENO, "Rasis aqui\n", 11);
 	usleep_ph(dock, dock->data->time_sleep);
 	writting(dock, 3);
 }
@@ -188,7 +185,7 @@ void *thread_routine(void *arg)
 
 void	is_ornot_dead(t_philo *philo, t_list *list)
 {
-	int	ti;
+	useconds_t	ti;
 	int			i;
 
 	i = 0;
@@ -201,11 +198,11 @@ void	is_ornot_dead(t_philo *philo, t_list *list)
 		{
 			pthread_mutex_lock(&philo->data->ate);
 			philo[i].data->dead = 0;
-			pthread_mutex_unlock(&philo->data->dead_oppa);
+			pthread_mutex_unlock(&philo->data->ate);
 			pthread_mutex_unlock(philo[i].forky_l);
 			pthread_mutex_unlock(&philo[i].forky_r);
 			writting(philo, 5);
-			exit(1) ;
+			exit (1);
 		}
 		if (list->num_philo != 1)
 			i++;
@@ -251,15 +248,12 @@ int main(int argc, char **argv)
 				write(1, "There was an error creating the threads\n", 40);
 				return (1);
 			}
-			usleep(120);
+			usleep(200);
 		}
-		//write(STDERR_FILENO, "hasus aqui\n", 11);
 		is_ornot_dead(philo, &data);
-		i = -1;/*
+		i = -1;
 		while (++i < data.num_philo)
-		{
 			pthread_join(data.philo_thread[i], NULL);
-		}*/
 	}
 	else
 		write(1, "Insert 4 or 5 arguments\n", 24);
