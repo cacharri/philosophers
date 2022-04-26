@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/25 21:38:08 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/26 20:23:29 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_list
 	int					num_philo;
 	useconds_t			time_die;
 	useconds_t			time_eat;
-	useconds_t		time_sleep;
+	useconds_t			time_sleep;
 	int					ntpm_eat;
 	int					dead;
 	useconds_t			startt;
@@ -41,7 +41,6 @@ typedef struct s_list
 	pthread_t			*philo_thread;
 	pthread_mutex_t		ate;
 }								t_list;
-
 
 typedef struct s_philo
 {
@@ -60,5 +59,9 @@ void			philos_init(t_philo *philo, t_list *data);
 void			*thread_routine(void *arg);
 void			routine(t_philo *dock);
 void			writting(t_philo *dock, int s);
+void			parseo(t_list *data, int argc);
+void			init(t_list *data, char **argv);
+void			is_ornot_dead(t_philo *philo, t_list *list);
+void			init_fork(t_philo *philo, t_list *data);
 
 #endif
