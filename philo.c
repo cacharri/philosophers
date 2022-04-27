@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/26 20:47:36 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/27 20:36:32 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,17 @@ void	init_fork(t_philo *philo, t_list *data)
 	int	i;
 
 	i = 0;
-	while (i <= data->num_philo)
+	while (i < data->num_philo)
 	{
 		if (pthread_mutex_init(&philo[i].forky_r, NULL))
 		{
 			write(1, "There was an error with the init\n", 33);
 			exit (1);
 		}
-		else if (i != data->num_philo  || i == 0)
+		else if (i != 0)
 			philo[i].forky_l = &philo[i - 1].forky_r;
 		else
-			philo[0].forky_l = &philo[i].forky_r;
+			philo[0].forky_l = &philo[data->num_philo - 1].forky_r;
 		i++;
 	}
 }
@@ -93,22 +93,25 @@ int	main(int argc, char **argv)
 	t_philo		*philo;
 	int			i;
 
-	i = 0;
+	i = -1;
 	philo = NULL;
 	if (argc == 5 || argc == 6)
 	{
 		init(&data, argv);
 		parseo(&data, argc);
-		if (pthread_mutex_init(&data.ate, NULL))
-		{
-			write(1, "There was an error with the init\n", 33);
-			return (1);
-		}
-		//init_fork(philo, &data);
-		
+		mutex_ate(&data);
 		philo = malloc(sizeof(t_philo) * data.num_philo);
 		philos_init(philo, &data);
 		init_fork(philo, &data);
+		create_thread(philo, &data);
+		is_ornot_dead(philo, &data);
+		while (++i < data.num_philo)
+			pthread_join(data.philo_thread[i], NULL);
+	}
+	else
+		write(1, "Insert 4 or 5 arguments\n", 24);
+	return (0);
+}
 		/*while (++i <= data.num_philo)
 		{
 			if (pthread_mutex_init(&philo[i].forky_r, NULL))
@@ -120,9 +123,8 @@ int	main(int argc, char **argv)
 				philo[i].forky_l = &philo[i - 1].forky_r;
 			else
 				philo[0].forky_l = &philo[i].forky_r;
-		}*/
+		}
 		//philos_init(philo, &data);
-		i = -1;
 		while (++i < data.num_philo)
 		{
 			if (pthread_create(&data.philo_thread[i], NULL, &thread_routine,
@@ -132,13 +134,4 @@ int	main(int argc, char **argv)
 				return (1);
 			}
 			usleep(200);
-		}
-		is_ornot_dead(philo, &data);
-		i = -1;
-		while (++i < data.num_philo)
-			pthread_join(data.philo_thread[i], NULL);
-	}
-	else
-		write(1, "Insert 4 or 5 arguments\n", 24);
-	return (0);
-}
+		}*/

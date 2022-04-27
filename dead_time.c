@@ -6,11 +6,37 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:22:51 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/26 19:31:10 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/27 18:46:48 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	mutex_ate(t_list *data)
+{
+	if (pthread_mutex_init(&data->ate, NULL))
+	{
+		write(1, "There was an error with the init\n", 33);
+		exit (1);
+	}
+}
+
+void	create_thread(t_philo *philo, t_list *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->num_philo)
+	{
+		if (pthread_create(&data->philo_thread[i], NULL, &thread_routine,
+				&philo[i]))
+		{
+			write(1, "There was an error creating the threads\n", 40);
+			exit (1);
+		}
+		usleep(200);
+	}
+}
 
 void	is_ornot_dead(t_philo *philo, t_list *list)
 {
