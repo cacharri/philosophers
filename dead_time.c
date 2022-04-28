@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:22:51 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/27 18:46:48 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/28 19:22:57 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	create_thread(t_philo *philo, t_list *data)
 			write(1, "There was an error creating the threads\n", 40);
 			exit (1);
 		}
-		usleep(200);
+		usleep_ph(philo, philo->data->time_die);
 	}
 }
 
