@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/27 20:36:32 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/04/28 18:43:30 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,26 +112,3 @@ int	main(int argc, char **argv)
 		write(1, "Insert 4 or 5 arguments\n", 24);
 	return (0);
 }
-		/*while (++i <= data.num_philo)
-		{
-			if (pthread_mutex_init(&philo[i].forky_r, NULL))
-			{
-				write(1, "There was an error with the init\n", 33);
-				return (1);
-			}
-			else if (i != data.num_philo || i == 0)
-				philo[i].forky_l = &philo[i - 1].forky_r;
-			else
-				philo[0].forky_l = &philo[i].forky_r;
-		}
-		//philos_init(philo, &data);
-		while (++i < data.num_philo)
-		{
-			if (pthread_create(&data.philo_thread[i], NULL, &thread_routine,
-					&philo[i]))
-			{
-				write(1, "There was an error creating the threads\n", 40);
-				return (1);
-			}
-			usleep(200);
-		}*/
