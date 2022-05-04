@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/28 18:43:30 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/05/04 22:19:19 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,34 @@ void	writting(t_philo *dock, int s)
 {
 	useconds_t	time;
 
+	pthread_mutex_lock(&dock->data->ate);
 	if (dock->data->dead == 0 && s != DEAD)
+	{
+		pthread_mutex_unlock(&dock->data->ate);
 		return ;
+	}
+	pthread_mutex_unlock(&dock->data->ate);
 	time = time_me() - dock->data->startt;
-	if (s == 6)
+	if (s == FORLEF)
 		printf("%d philosopher %d has taken a fork\n", time, dock->tid);
-	else if (s == 7)
+	else if (s == FORIGH)
 		printf("%d philosopher %d has taken a fork\n", time, dock->tid);
-	else if (s == 1)
+	else if (s == EAT)
 		printf ("%d philosopher %d is eating\n", time, dock->tid);
-	else if (s == 2 && dock->times_eat != dock->data->ntpm_eat)
+	else if (s == SLEEP && dock->times_eat != dock->data->ntpm_eat)
 		printf ("%d philosopher %d is sleeping\n", time, dock->tid);
-	else if (s == 3 && dock->times_eat != dock->data->ntpm_eat)
+	else if (s == THINK && dock->times_eat != dock->data->ntpm_eat)
 		printf ("%d philosopher %d is thinking\n", time, dock->tid);
-	else if (s == 5)
+	else if (s == DEAD)
 		printf ("%d philosopher %d have just died\n", time, dock->tid);
 }
 
 void	routine(t_philo *dock)
 {
-	pthread_mutex_lock(&dock->forky_r);
-	writting(dock, 7);
 	pthread_mutex_lock(dock->forky_l);
 	writting(dock, 6);
+	pthread_mutex_lock(&dock->forky_r);
+	writting(dock, 7);
 	writting(dock, 1);
 	dock->last_meal_ti = time_me();
 	dock->times_eat++;
@@ -56,8 +61,10 @@ void	*thread_routine(void *arg)
 
 	dock = (t_philo *) arg;
 	dock->last_meal_ti = time_me();
+	if (dock->tid % 2 == 0)
+		usleep(100);
 	pthread_mutex_lock(&dock->data->ate);
-	while (dock->data->dead == 1 && dock->times_eat != dock->data->ntpm_eat)
+	while (dock->data->dead == 1)
 	{
 		pthread_mutex_unlock(&dock->data->ate);
 		routine(dock);
@@ -74,17 +81,29 @@ void	init_fork(t_philo *philo, t_list *data)
 	i = 0;
 	while (i < data->num_philo)
 	{
-		if (pthread_mutex_init(&philo[i].forky_r, NULL))
-		{
-			write(1, "There was an error with the init\n", 33);
-			exit (1);
-		}
-		else if (i != 0)
+		pthread_mutex_init(&philo[i].forky_r, NULL);
+		if (i != 0)
 			philo[i].forky_l = &philo[i - 1].forky_r;
 		else
 			philo[0].forky_l = &philo[data->num_philo - 1].forky_r;
 		i++;
 	}
+}
+
+int	check_max(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (1)
+	{
+		if (philo[i].times_eat < philo->data->ntpm_eat)
+			return (0);
+		else if (i == philo->data->num_philo - 1)
+			return (1);
+		i++;
+	}
+	return (1);
 }
 
 int	main(int argc, char **argv)
@@ -98,13 +117,16 @@ int	main(int argc, char **argv)
 	if (argc == 5 || argc == 6)
 	{
 		init(&data, argv);
-		parseo(&data, argc);
-		mutex_ate(&data);
+		if (parseo(&data, argc) == 0)
+			return (0);
+		pthread_mutex_init(&data.ate, NULL);
 		philo = malloc(sizeof(t_philo) * data.num_philo);
 		philos_init(philo, &data);
 		init_fork(philo, &data);
-		create_thread(philo, &data);
-		is_ornot_dead(philo, &data);
+		if (create_thread(philo, &data) == 0)
+			return (0);
+		if (is_ornot_dead(philo, &data) == 0)
+			return (0);
 		while (++i < data.num_philo)
 			pthread_join(data.philo_thread[i], NULL);
 	}

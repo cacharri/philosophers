@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:09:10 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/04/26 20:47:38 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/05/04 21:50:41 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ static int	ft_atoi(const char *str)
 	return (res * mas);
 }
 
-void	parseo(t_list *data, int argc)
+int	parseo(t_list *data, int argc)
 {
-	if (data->num_philo <= 1)
-		write (1, "Philosophers must be more than 1\n", 33);
+	if (data->num_philo < 1)
+		write (1, "Philosophers must be more than 0\n", 33);
 	if (data->time_die < 1)
 		write (1, "Time to die must be more than 0\n", 32);
 	if (data->time_eat < 1)
@@ -56,12 +56,13 @@ void	parseo(t_list *data, int argc)
 		if (data->ntpm_eat < 1)
 		{
 			write (1, "Each philosopher must eat  more times than 0\n", 45);
-			exit (1);
+			return (0);
 		}
 	}
-	if (data->num_philo <= 1 || data->time_die < 1 || data->time_eat < 1
+	if (data->num_philo < 1 || data->time_die < 1 || data->time_eat < 1
 		|| data->time_sleep < 1)
-		exit (1);
+		return (0);
+	return (1);
 }
 
 void	init(t_list *data, char **argv)
@@ -87,8 +88,8 @@ void	philos_init(t_philo *philo, t_list *data)
 	while (++i < data->num_philo)
 	{
 		philo[i].tid = i + 1;
-		philo[i].ate = 0;
 		philo[i].times_eat = 0;
 		philo[i].data = data;
+		philo[i].last_meal_ti = time_me();
 	}
 }
