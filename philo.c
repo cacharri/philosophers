@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:29:19 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/05/04 22:19:19 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/05/05 20:28:24 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,6 @@ void	init_fork(t_philo *philo, t_list *data)
 			philo[0].forky_l = &philo[data->num_philo - 1].forky_r;
 		i++;
 	}
-}
-
-int	check_max(t_philo *philo)
-{
-	int	i;
-
-	i = 0;
-	while (1)
-	{
-		if (philo[i].times_eat < philo->data->ntpm_eat)
-			return (0);
-		else if (i == philo->data->num_philo - 1)
-			return (1);
-		i++;
-	}
-	return (1);
 }
 
 int	main(int argc, char **argv)

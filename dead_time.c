@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:22:51 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/05/04 22:19:21 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/05/05 20:26:14 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,16 @@ int	is_ornot_dead(t_philo *philo, t_list *list)
 		if (i == list->num_philo - 1)
 		{
 			i = 0;
-			if (list->ntpm_eat != - 1 && check_max(philo) == 1)
+			if (list->ntpm_eat != -1 && check_max(philo) == 1)
 			{
-				pthread_mutex_lock(&philo[i].data->ate);
-				philo[i].data->dead = 0;
-				pthread_mutex_unlock(&philo[i].data->ate);
+				aux_deadone(philo, i);
 				return (0);
 			}
-			usleep_ph(philo, 1);
 		}
 		ti = time_me() - philo[i].last_meal_ti;
 		if (ti >= philo[i].data->time_die)
 		{
-			pthread_mutex_lock(&philo[i].data->ate);
-			philo[i].data->dead = 0;
-			pthread_mutex_unlock(&philo[i].data->ate);
-			if (list->num_philo == 1)
-				pthread_mutex_unlock(philo[i].forky_l);
-			writting(philo, 5);
+			aux_dead(philo, list, i);
 			return (0);
 		}
 		if (list->num_philo != 1)

@@ -6,7 +6,7 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:14:50 by ialvarez          #+#    #+#             */
-/*   Updated: 2022/05/04 21:50:29 by ialvarez         ###   ########.fr       */
+/*   Updated: 2022/05/05 20:28:02 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,7 @@ int				is_ornot_dead(t_philo *philo, t_list *list);
 void			init_fork(t_philo *philo, t_list *data);
 int				create_thread(t_philo *philo, t_list *list);
 int				check_max(t_philo *philo);
+void			aux_deadone(t_philo *philo, int i);
+void			aux_dead(t_philo *philo, t_list *list, int i);
 
 #endif
